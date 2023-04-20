@@ -1,10 +1,15 @@
 const listPokemon = document.querySelector("#list-pokemons");
 let url_API = "https://pokeapi.co/api/v2/pokemon/";
 
+
+const requests = [];
 for (let i = 1; i <= 151; i++) {
-  fetch(url_API + i)
-    .then((response) => response.json())
-    .then((data) => showPokemon(data));
+    requests.push(fetch(url_API + i)
+        .then((response) => response.json()));
+
+    Promise.all(requests).then((data) => {
+        data.forEach(pokemon => showPokemon(pokemon));
+    });
 }
 
 function showPokemon(Poke) {
