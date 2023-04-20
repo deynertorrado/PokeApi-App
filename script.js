@@ -1,14 +1,19 @@
 const listPokemon = document.querySelector("#list-pokemons");
 let url_API = "https://pokeapi.co/api/v2/pokemon/";
 
+let pokemonData = [];
 
-const requests = [];
 for (let i = 1; i <= 151; i++) {
-    requests.push(fetch(url_API + i)
-        .then((response) => response.json()));
-
-    Promise.all(requests).then((data) => {
-        data.forEach(pokemon => showPokemon(pokemon));
+  fetch(url_API + i)
+    .then((response) => response.json())
+    .then((data) => {
+      pokemonData.push(data);
+      
+      // Si hemos obtenido datos de todos los Pokémon, ordenarlos por número de identificación
+      if (pokemonData.length === 151) {
+        pokemonData.sort((a, b) => a.id - b.id);
+        pokemonData.forEach((pokemon) => showPokemon(pokemon));
+      }
     });
 }
 
